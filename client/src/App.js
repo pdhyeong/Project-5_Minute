@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes,Route } from 'react-router-dom';
-import './styles/Main.scss';
+import './styles/App.scss';
 import Header from './components/Header';
-import Main from './pages/Main';
-import Mypage from './pages/Mypage';
+import Main from './Main';
+
 
 function App() {
+  const [isLoggedIn,setIsLoggedIn] = useState(true);
+
   return (
     <div className="App">
-        <Header></Header>
-        <Routes>
-          <Route path='/' element={<Main></Main>}></Route>
-          <Route path='/mypage' element={<Mypage></Mypage>}></Route>
-        </Routes>
-        앱입니다.
+        <Header isLoggedIn={isLoggedIn}></Header>
+        <Main></Main>
+      
     </div>
   );
 }
