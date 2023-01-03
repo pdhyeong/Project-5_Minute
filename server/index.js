@@ -3,8 +3,14 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+//디비 연결
+const connect = require("./schemas/connection");
+connect();
 
-const port = 8080;
+let indexRouter = require('./routers/index');
+let userRouter = require('./routers/users');
+
+const PORT = process.env.PORT || 8080;
 const app = express();
 
 
@@ -17,10 +23,11 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-app.get('/',(req,res)=> {
-    res.send("요청 성공");
-});
 
-app.listen(port, () => {
-    console.log('Example app listening on port');
+app.use('/',indexRouter);
+app.use('/users',userRouter);
+
+
+app.listen(PORT, () => {
+    console.log("Hello world");
 });
