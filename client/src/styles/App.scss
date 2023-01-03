@@ -1,5 +1,5 @@
 @import './Header.scss';
-
+@import './Mypage.scss';
 $--main-background-color : rgb(21, 32, 43);
 $--main-hover-color : rgba(15,20,25,0.2);
 $--main-color : #f7f9f9;
@@ -68,8 +68,10 @@ body{
     top: 0px;
     display: flex;
     align-items: center;
+    z-index: 1;
     
-    background-color: rgba($--main-background-color,0.9);
+    background-color: rgba($--main-background-color,0.6);
+    backdrop-filter: blur(10px);
 
 
 
@@ -83,7 +85,7 @@ body{
         background-color: $--main-border-color;
         
         &:focus-within{
-            background-color: $--main-background-color;
+            background-color: transparent;
             border: 1px solid orange;
 
         }
@@ -109,7 +111,7 @@ body{
                 background-color: $--main-border-color;
                 color: $--main-color;
             &:focus{
-                background-color: $--main-background-color;
+                background-color: transparent;
             }
         }
     }
@@ -180,14 +182,14 @@ body{
 .post{
     cursor: pointer;
     &:hover{
-        background-color: $--main-hover-color;
+        background-color: rgba(255, 255, 255, 0.03);
     }
     display: flex;
     padding: 10px 16px;
 
     border-bottom: 1px solid $--main-border-color;
     border-top: 1px solid $--main-border-color;
-
+    
     &__profile{
         width: 50px;
         height: 50px;
@@ -230,6 +232,88 @@ body{
 
 
 }
+
+.createpost{
+    display: flex;
+    padding: 0 16px;
+    align-items: center;
+    border-top: 1px solid $--main-border-color;
+    border-bottom: 1px solid $--main-border-color;
+
+    
+    &__profile{
+        width: 2.5rem;
+        height: 2.5rem;
+        margin: 10px 20px 10px 0;
+        
+        border-radius: 25px;
+        background-color: black;
+    }
+
+    &__input{
+        width: calc(100% - 200px);
+        height: 2rem;
+        border-radius: 3px;
+        border: none;
+        outline: none;
+        background-color: $--main-border-color;
+        color: $--main-color;
+
+        &:hover{
+            border: 1px solid orange;
+        }
+    }
+    & > svg{
+        margin-left: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @media (max-width: 1150px) {
