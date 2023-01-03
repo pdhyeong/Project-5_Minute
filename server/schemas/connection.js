@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
+require("dotenv").config();
 
 const connect = () => {
   if (process.env.NODE_ENV !== 'production') {
     mongoose.set('debug', true);
   }
 
-  mongoose.connect(`mongodb+srv://pdhyeong:<password>@cluster0.s3sxu1m.mongodb.net/?retryWrites=true&w=majority`, {
+  mongoose.set("strictQuery", false);
+
+  mongoose.connect(`mongodb+srv://pdhyeong:${process.env.Databasepassword}@cluster0.s3sxu1m.mongodb.net/?retryWrites=true&w=majority`, {
     dbName: 'Project2',
     useNewUrlParser: true,
   }, (error) => {

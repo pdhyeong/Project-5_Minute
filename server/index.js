@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const env = require("dotenv").config();
 
 //디비 연결
 const connect = require("./schemas/connection");

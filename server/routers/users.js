@@ -13,10 +13,17 @@ router.get('/',async(req,res,next) => {
 });
 router.post('/',async (req,res,next) => {
     try{
+        console.log(req.body);
         const user = await User.create({
-
+            nickname: req.body.nickname,
+            password: req.body.password,
+            email: req.body.email,
+            address: req.body.address,
+            token_amount: req.body.token_amount,
+            eth_amount: req.body.eth_amount,
+            created_at: new Date(),
+            problem_id : req.body.problem_id
         });
-
         console.log(user);
         res.status(201).json(user);
     } catch (err) {
@@ -24,5 +31,4 @@ router.post('/',async (req,res,next) => {
         next(err);
     }
 })
-
 module.exports = router;
