@@ -8,8 +8,8 @@ const MyNft = () => {
             {   
                 <div className='mynft__nft__container'>
                 {
-                    nft.map(e=>{
-                        return <div className='mynft__nft' >{e}</div>
+                    nft.map((e,i)=>{
+                        return <div key = {i} className='mynft__nft' >{e}</div>
                     })
                 }
                 </div>

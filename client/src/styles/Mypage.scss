@@ -28,6 +28,32 @@ $--main-border-color : rgb(56, 68, 77);
         }
         &__spacer{
             height: 90px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-right: 10px;
+            
+
+             & > label{
+                cursor: pointer;
+                border-radius: 20px;
+                height: 40px;
+                border: 1px solid $--main-color;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                & > h5{
+                    margin: 0 ;
+                    padding: 10px;
+                }
+
+                &> svg{
+                    width: 20px;
+                    padding: 10px;
+                    padding-left: 0;
+                }
+            }
         }
 
     }

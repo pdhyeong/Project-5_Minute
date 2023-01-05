@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../context/LoginContext';
 import MyNft from './MyNft';
 import MyRank from './MyRank';
 
 const Footer = () => {
+    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
+    useContext(UserContext);
+    
     return (
-        <footer>
-            <MyRank></MyRank>
-            <MyNft></MyNft>
+        <footer className='footer'>
+            {isLoggedIn&&<MyRank></MyRank>}
+            {isLoggedIn&&<MyNft></MyNft>}
             
-            © 2023 5Minutes, All right reserved.
+            <div className='footer__copyright'>© 2023 5Minutes, All right reserved.</div>
         </footer>
     );
 };

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../context/LoginContext';
 import CreatePost from './CreatePost';
 import Post from './Post';
 
 const PostLayout = () => {
+    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
+    useContext(UserContext);
     return (
         <div className='postlayout'>
-            <CreatePost></CreatePost>
+            {isLoggedIn&&<CreatePost></CreatePost>}
             <Post></Post>
             <Post></Post>
             <Post></Post>

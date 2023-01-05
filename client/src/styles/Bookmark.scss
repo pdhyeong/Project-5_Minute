@@ -1,0 +1,27 @@
+$--main-background-color : rgb(21, 32, 43);
+$--main-hover-color : rgba(15,20,25,0.2);
+$--main-color : #f7f9f9;
+$--sub-color : rgba(#f7f9f9, 0.3);
+$--main-border-color : rgb(56, 68, 77);
+
+
+.bookmark{
+    &__no-content{
+        margin-top: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+         
+        & > h1{
+            margin: 0;
+        }
+
+        & > p{
+            color: $--sub-color;
+            text-align: center;
+        }
+    }
+
+}
