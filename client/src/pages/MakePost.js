@@ -39,16 +39,8 @@ const MakePost = () => {
                 content: editorRef.current.getInstance().getMarkdown()
             }
      	)
-        // console.log(descriptions);
      }
-    // console.log(editorRef.current);
-    
-    // useEffect(()=>{
-    //     if(editorRef)   
-        // editorRef.current.classList.add('my-editor-root');
-    //     console.dir(editorRef.current.children)
-    // },[]);
-    
+
 
     return (
         <div className='makepost'>

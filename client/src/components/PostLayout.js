@@ -4,11 +4,10 @@ import CreatePost from './CreatePost';
 import Post from './Post';
 
 const PostLayout = () => {
-    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
-    useContext(UserContext);
+    const {accessToken} = useContext(UserContext);
     return (
         <div className='postlayout'>
-            {isLoggedIn&&<CreatePost></CreatePost>}
+            {accessToken&&<CreatePost></CreatePost>}
             <Post></Post>
             <Post></Post>
             <Post></Post>

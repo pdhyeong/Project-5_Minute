@@ -6,18 +6,23 @@ import LogginBanner from './components/LogginBanner';
 import { UserContext } from './context/LoginContext';
 
 function App() {
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken,setAccessToken] = useState(null);
+  const [userInfo,setUserInfo] = useState({
+    id: '',
+    email: '',
+    picture: '',
+    verified: null,
+  })
 
 
   return (
 
     <div className="App">
-      <UserContext.Provider value={{accessToken, setAccessToken, isLoggedIn,setIsLoggedIn}}>
+      <UserContext.Provider value={{userInfo,setUserInfo,accessToken,setAccessToken}}>
         <Header ></Header>
         <Main></Main>
         {
-          !isLoggedIn&&<LogginBanner ></LogginBanner>
+          accessToken===null&&<LogginBanner ></LogginBanner>
         }
 
       </UserContext.Provider>

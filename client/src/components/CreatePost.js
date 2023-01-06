@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import oreo from '../assets/레오쓰.jpeg'
-import axios from 'axios'
 
 const CreatPost = () => {
-    const SERVER_URL = '';
-    const [image,setImage] = useState({
-        image_file: '',
-        preview_URL: oreo,
-    });
+
     const navigate = useNavigate();
-
-
 
 
     return (

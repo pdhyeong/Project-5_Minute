@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png'
@@ -5,8 +6,24 @@ import { UserContext } from '../context/LoginContext';
 
 
 const Header = () => {
-    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
+    const {accessToken, setAccessToken, userInfo} =
     useContext(UserContext);
+
+    const handleLogout = async () => {
+        console.log('handle Logout!');
+        await axios
+          .post(`https://oauth2.googleapis.com/revoke?token=${accessToken}`)
+          .then(() => {
+            localStorage.clear();
+            setAccessToken(null);
+            window.location.assign("http://localhost:3000/");
+            
+          })
+          .catch(() => {
+            alert("로그아웃에 실패했습니다.");
+          });
+      };
+
 
     return (
         <header className='header'>
@@ -36,7 +53,7 @@ const Header = () => {
                 </Link>
                 }
                 {
-                isLoggedIn&&<Link to='/mypage'>
+                accessToken&&<Link to='/mypage'>
                     <li className='header-ul-li'>
                         <svg viewBox="0 0 24 24" aria-hidden="true" fill='#f7f9f9'><g><path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z"></path></g></svg>
                         <span>프로필</span>
@@ -44,21 +61,34 @@ const Header = () => {
                 </Link>
                 }
                 {
-                isLoggedIn&&<Link to='/bookmark'>
+                accessToken&&<Link to='/bookmark'>
                     <li className='header-ul-li'>
                         <svg viewBox="0 0 24 24" aria-hidden="true" fill='#f7f9f9'><g><path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z"></path></g></svg>
                         <span>북마크</span>
                     </li>
                 </Link>
                 }
-                {isLoggedIn&&<Link to='/post'>
+                {accessToken&&<Link to='/post'>
                     <li className='header-ul-li'>
                         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" fill='#f7f9f9' preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none"><path d="M2492 5109 c-45 -13 -108 -80 -121 -126 -7 -26 -11 -392 -11 -1130 l0 -1093 -1113 -2 -1113 -3 -41 -27 c-63 -41 -88 -90 -88 -169 0 -54 5 -72 27 -106 15 -22 44 -51 65 -64 l38 -24 1112 -3 1113 -2 2 -1113 3 -1112 24 -38 c13 -21 42 -50 64 -65 34 -23 52 -27 107 -27 55 0 73 4 107 27 22 15 51 44 64 65 l24 38 3 1112 2 1113 1113 2 1112 3 38 24 c21 13 50 42 65 64 23 34 27 52 27 107 0 55 -4 73 -27 107 -15 22 -44 51 -65 64 l-38 24 -1112 3 -1113 2 -2 1113 -3 1112 -24 38 c-47 76 -151 113 -239 86z"/></g></svg>
                         <span>Post</span>
                     </li>
                 </Link>
                 }
+                {accessToken&&<li onClick={handleLogout} className='header-ul-li header__logout'>
+                        <svg  version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" fill='#f7f9f9' preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none"><path d="M2492 5109 c-45 -13 -108 -80 -121 -126 -7 -26 -11 -392 -11 -1130 l0 -1093 -1113 -2 -1113 -3 -41 -27 c-63 -41 -88 -90 -88 -169 0 -54 5 -72 27 -106 15 -22 44 -51 65 -64 l38 -24 1112 -3 1113 -2 2 -1113 3 -1112 24 -38 c13 -21 42 -50 64 -65 34 -23 52 -27 107 -27 55 0 73 4 107 27 22 15 51 44 64 65 l24 38 3 1112 2 1113 1113 2 1112 3 38 24 c21 13 50 42 65 64 23 34 27 52 27 107 0 55 -4 73 -27 107 -15 22 -44 51 -65 64 l-38 24 -1112 3 -1113 2 -2 1113 -3 1112 -24 38 c-47 76 -151 113 -239 86z"/></g></svg>
+                        <span>Logout</span>
+                    </li>
+                
+                }
             </ul>
+            {accessToken&&<div className='header__loggedin-profile'>
+                <img src={userInfo.picture}/>
+                <div className='header__loggedin-profile__id'>
+                    <h5>{userInfo.email.split('@')[0]}</h5>
+                    <span>{'@'+userInfo.email.split('@')[0]}</span>
+                </div>
+            </div>}
         </header>
     );
 };

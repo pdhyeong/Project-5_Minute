@@ -3,23 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/LoginContext';
 
 const SocialLogin = () => {
-    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
-    useContext(UserContext);
+    const {accessToken, setAccessToken} = useContext(UserContext);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-      const url = new URL(window.location.href);
-      const hash = url.hash;
-      if (!hash) return;
-      const token = hash.split("=")[1].split("&")[0];
+        const url = new URL(window.location.href);
+        const hash = url.hash;
+        if (!hash) return;
+        const token = hash.split("=")[1].split("&")[0];
 
+        localStorage.setItem('accessToken',token);
+        console.log(token,hash);
+        console.log(accessToken);
+        navigate("/");
 
-      setAccessToken(token);
-      setIsLoggedIn(true);
-      navigate("/");
-
-
-    }, [accessToken, navigate]);
+    }, []);
     
     return<div className="loading-container">
         <div className="loading"></div>

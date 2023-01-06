@@ -1,10 +1,12 @@
 /* eslint-disable no-undef */
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import profile from '../assets/레오쓰.jpeg'
 import Post from '../components/Post';
+import { UserContext } from '../context/LoginContext';
 
 
 const Mypage = () => {
+    const {userInfo} = useContext(UserContext);
     const [tap,setTap] = useState(0);
     const SERVER_URL = '';
     const [image,setImage] = useState({
@@ -78,8 +80,8 @@ const Mypage = () => {
                 </input>
             </div>
             <div className='mypage__profile__contents'>
-                <h3>zinoopark</h3>
-                <span>@zinoo_park</span>
+                <h3>{userInfo.email.split('@')[0]}</h3>
+                <span>@{userInfo.email.split('@')[0]}</span>
                 <p>가입일: 2022년 10월</p>
                 <div>
                     획득 뱃지 <span>a</span><span>b</span><span>c</span><span>d</span>

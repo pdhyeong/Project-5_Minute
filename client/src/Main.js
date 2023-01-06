@@ -12,77 +12,53 @@ import { createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from './components/SocialLogin';
 import axios from 'axios';
+import Redirect from './components/Redirect';
 
 
 const Main = () => {
-    const [userInfo,setUserInfo] = useState({
-        id: '',
-        email: '',
-        profileImgUrl: ''
-    });
-    const {accessToken, setAccessToken, isLoggedIn, setIsLoggedIn} =
-        useContext(UserContext);
+    const {accessToken, setAccessToken, userInfo, setUserInfo} = useContext(UserContext);
+    
 
-
-    const checkAuth = async (accessToken) => {
-        console.log(accessToken)
-        await axios
+    const getUserInfoByAccessToken = async (accessToken) => {
+        
+        const result = await axios
             .get("https://www.googleapis.com/oauth2/v2/userinfo", {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
             })
-            .then((res) => {
-                const {id,email,picture} = res.data;
+            .then(res => res.data)
+            .catch(err=>console.log(err));
+         return result
+    };    
 
-                // console.log(email,id,picture)
-                setUserInfo({
-                    id: id,
-                    email: email,
-                    profileImgUrl: picture,
-                });
-                localStorage.setItem('user_info',JSON.stringify(
-                    res.data
-                ))
-                
-            })
-            .catch((err) => {
-                console.log(err)
-            alert("oAuth token expired");
-            setAccessToken(null);
-            setIsLoggedIn(false);
-            // window.location.assign("http://localhost:3000");
-            });
-        };    
+
+    
+
     useEffect(()=>{
-        const user_info =  localStorage.getItem('user_info');
-        if(accessToken){
-            const getAuthData = async () => {
-                await checkAuth(accessToken);
+        const storedAccessToken =  (localStorage.getItem('accessToken'));
+        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+       
+        if(storedAccessToken && accessToken===null){
+            if(storedUserInfo ) setUserInfo(storedUserInfo);
+            else getUserInfoByAccessToken(storedAccessToken)
+            .then((result)=>{
+                console.log(result);
+                setUserInfo(result);
+                localStorage.setItem('useInfo',JSON.stringify(result));;
+            })
 
-            };
-            getAuthData();
-            localStorage.setItem('access_token',accessToken);
-            console.log(userInfo)
-        }   
-        else if(!!user_info) {
-            setAccessToken(localStorage.getItem('access_token'));
-            const {id,email,picture} = JSON.parse(localStorage.getItem('user_info'));
-
-
-            // console.log(email,id,picture)
-            setUserInfo({
-                id: id,
-                email: email,
-                profileImgUrl: picture,
-            });
-            setIsLoggedIn(true);
+            setAccessToken(storedAccessToken);
+        }
+        else if(accessToken){
+            console.log('Logged In')
         }
         else{
-            console.log('accessToken 없음');
+            console.log('Logged Out');
         }
-        
     },[accessToken]);
+
+
 
     return (
         <main className='main'>
@@ -90,10 +66,10 @@ const Main = () => {
                 <SearchBar></SearchBar>
                 <Routes>
                     <Route path='/' element={<PostLayout />}></Route>
-                    <Route path='/mypage' element={<Mypage></Mypage>}></Route>
-                    <Route path='/bookmark' element={<Bookmark></Bookmark>}></Route>
+                    <Route path='/mypage' element={accessToken?<Mypage></Mypage>:<Redirect></Redirect>}></Route>
+                    <Route path='/bookmark' element={accessToken?<Bookmark></Bookmark>:<Redirect></Redirect>}></Route>
                     <Route path='/explore' element={<Explore></Explore>}></Route>
-                    <Route path='/post' element={<MakePost></MakePost>}></Route>
+                    <Route path='/post' element={accessToken?<MakePost></MakePost>:<Redirect></Redirect>}></Route>
                     <Route path='/redirect' element={<SocialLogin></SocialLogin>}></Route>
                 </Routes>
             </div>
