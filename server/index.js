@@ -29,6 +29,8 @@ app.use(cors({
 app.use(cookieParser());
 app.use(morgan('dev'));
 
+
+// router 구분
 app.use('/',indexRouter);
 app.use('/users',userRouter);
 app.use('/post', postRouter);
