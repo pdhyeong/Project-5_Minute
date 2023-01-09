@@ -1,19 +1,31 @@
-import React from 'react';
-import { Routes,Route } from 'react-router-dom';
-import './styles/Main.scss';
+import React, { useState } from 'react';
+import './styles/App.scss';
 import Header from './components/Header';
-import Main from './pages/Main';
-import Mypage from './pages/Mypage';
+import Main from './Main';
+import LogginBanner from './components/LogginBanner';
+import { UserContext } from './context/LoginContext';
 
 function App() {
+  const [accessToken,setAccessToken] = useState(null);
+  const [userInfo,setUserInfo] = useState({
+    id: '',
+    email: '',
+    picture: '',
+    verified_email: null,
+  })
+
+
   return (
+
     <div className="App">
-        <Header></Header>
-        <Routes>
-          <Route path='/' element={<Main></Main>}></Route>
-          <Route path='/mypage' element={<Mypage></Mypage>}></Route>
-        </Routes>
-        앱입니다.
+      <UserContext.Provider value={{userInfo,setUserInfo,accessToken,setAccessToken}}>
+        <Header ></Header>
+        <Main></Main>
+        {
+          accessToken===null&&<LogginBanner ></LogginBanner>
+        }
+
+      </UserContext.Provider>
     </div>
   );
 }
