@@ -56,16 +56,18 @@ router.post('/bookmark',async (req,res,next) => {
 router.get('/bookmark',async (req,res,next) => {
     let user_name = req.query.user_name;
     let result;
-    let po;
+    let bookmarkdata;
     if(user_name){
         result = await User.find({"nickname": `${user_name}`});
+        // nickname이 사용자와 같은 사람중
         let find = result[0].bookmark;
         console.log(find);
+        // bookmark와 title이 같으면 결과 출력
         let query = find.map(e=>{return {title:e
         }});
         console.log(query);
-        po = await Post.find({$or: query});
-        return res.status(200).json(po);
+        bookmarkdata = await Post.find({$or: query});
+        return res.status(200).json(bookmarkdata);
     }
     // 이 유저의 bookmark한 postname을 프론트로 보내줄것은 post의 콘텐츠
     

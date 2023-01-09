@@ -12,5 +12,7 @@ router.get('/',async (req,res,next) => {
         next(err);
     }
 });
-
+router.put('/profilechange',async (req,res,next) => {
+    
+});
 module.exports = router;

@@ -1,0 +1,108 @@
+$--main-background-color : rgb(21, 32, 43);
+$--main-hover-color : rgba(56, 68, 77,0.8);
+$--sub-color : rgba(#f7f9f9, 0.3);
+$--main-color : #f7f9f9;
+$--main-border-color : rgb(56, 68, 77);
+
+
+.header{
+    width: 250px;
+    height: 100vh;
+    padding: 0 12px;
+    position: sticky;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+
+
+    &-img-wrapper{
+        width: max-content;
+        padding: 6px;
+        margin-bottom: 3px;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        border-radius: 9999px;
+
+        &:hover{
+            background-color: $--main-border-color;
+        }
+
+        &-img{
+            width: 50px;
+        }
+    }
+
+
+    &-ul-li{
+        width: max-content;
+        padding: 12px 20px 12px 12px;
+        
+
+        border-radius: 9999px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 20px;
+        cursor: pointer;
+
+        &:hover{
+            background-color: $--main-hover-color;
+            
+        }
+
+        svg{
+            width: 20px;
+            margin-right: 16px;
+            color: $--main-color;
+        }
+    }
+    &__logout{
+        & > svg{
+            transform: rotate(45deg);
+            border: 1px solid $--main-color;
+            border-radius: 9999px;
+            padding: 5px;
+            width: 10px;
+        }
+
+
+    }
+
+    &__loggedin-profile{
+        cursor: pointer;
+        padding: 12px;
+        display: flex;
+        margin-bottom: 30px;
+        margin-top: auto;
+        border-radius: 9999px;
+        width: max-content;
+
+        &:hover{
+            background-color: $--main-hover-color;
+        }
+
+        & > img{
+            width:3em;
+            height:3em;
+            border-radius: 9999px;
+        }
+
+        &__id{
+            margin: 0.5em 1em;
+
+            &> h5{
+                margin: 0;
+                
+            }
+
+            & > span{
+                font-size: 0.8em;
+                color: $--sub-color;
+            }
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+

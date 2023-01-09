@@ -1,0 +1,38 @@
+$--main-background-color : rgb(21, 32, 43);
+$--main-hover-color : rgba(15,20,25,0.2);
+$--main-color : #f7f9f9;
+$--sub-color : rgba(#f7f9f9, 0.3);
+$--main-border-color : rgb(56, 68, 77);
+
+
+.explore{
+    &__recommend{
+        border-bottom: 1px solid $--main-border-color;
+
+        & > h3{
+            padding: 0 16px;
+            margin: 16px 0 8px 0;
+        }
+
+    }
+}
+
+.recommend-tag{
+    cursor: pointer;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &:hover{
+        background-color: $--main-border-color;
+    }
+
+    & > span{
+        color: $--sub-color;
+        font-size: 12px;
+    }
+    & > h5{
+        margin: 3px 0;
+    }
+}
