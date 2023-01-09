@@ -11,7 +11,7 @@ function App() {
     id: '',
     email: '',
     picture: '',
-    verified: null,
+    verified_email: null,
   })
 
 

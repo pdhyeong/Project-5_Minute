@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Footer from './components/Footer';
 import { Routes,Route } from 'react-router-dom';
 import Mypage from './pages/Mypage';
@@ -8,8 +8,6 @@ import Bookmark from './pages/Bookmark';
 import Explore from './pages/Explore';
 import MakePost from './pages/MakePost';
 import { UserContext } from './context/LoginContext';
-import { createContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import SocialLogin from './components/SocialLogin';
 import axios from 'axios';
 import Redirect from './components/Redirect';
@@ -28,7 +26,11 @@ const Main = () => {
             },
             })
             .then(res => res.data)
-            .catch(err=>console.log(err));
+            .catch(err=>{               
+                console.log('token expired',err);
+                localStorage.clear();
+                setAccessToken(null);
+            });
          return result
     };    
 
@@ -47,6 +49,7 @@ const Main = () => {
                 setUserInfo(result);
                 localStorage.setItem('useInfo',JSON.stringify(result));;
             })
+
 
             setAccessToken(storedAccessToken);
         }
