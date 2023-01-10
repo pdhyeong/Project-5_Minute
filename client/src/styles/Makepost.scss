@@ -47,6 +47,29 @@ $--main-border-color : rgb(56, 68, 77);
                 right: 10px;
                 font-size: 0.6rem;
             }
+
+        }
+        & > textarea{
+            width: 100%;
+            height: 350px;
+            padding: 3%;
+
+            font-size: 13px;
+            box-sizing: border-box;
+            
+            border: 1px solid $--main-border-color;
+            border-radius: 5px;
+            background-color: #111;
+            
+            color: $--main-color;
+
+
+            &:focus{
+                border: 0.5px solid orange;
+            }
+            &:focus-visible{
+                outline: none;
+            }
         }
 
         & > button {

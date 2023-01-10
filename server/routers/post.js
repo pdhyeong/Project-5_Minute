@@ -10,7 +10,6 @@ router.post('/',async(req,res,next) => {
         like: req.body.like,
         problem_name: req.body.problem_name,
         title: req.body.title,
-        hash_title: [req.body.hash_title],
         content: req.body.content,
         created_at : new Date()
     });
