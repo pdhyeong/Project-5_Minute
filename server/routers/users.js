@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Web3 = require('web3');
 const User = require('../schemas/users');
+const {createUserAddr} = require('../web3')
 
 
 const rpcURL = process.env.INFURAURL;
@@ -10,24 +11,32 @@ const web3 = new Web3(rpcURL);
 
 router.get('/',async(req,res,next) => {
     try{
-        const users = await User.find({}); 
-      res.json(users);
+        
+        const users = await User.find({"email":req.query.email}); 
+        console.log(users);
+        res.json(users);
     } catch (err) {
         console.error(err);
         next(err);
     }
 });
 router.post('/',async (req,res,next) => {
+    console.log(req.body);
     try{
-        let account = web3.eth.accounts.create();
+        const {address,salt,doubleHashedPassword,hashedPrivateKey} = await createUserAddr(req.body.password);
+        console.log(address,salt,doubleHashedPassword,hashedPrivateKey);
+
+
         const user = await User.create({
             nickname: req.body.nickname,
-            profile_image: "https://pixabay.com/ko/photos/%eb%85%b8%ed%8a%b8%eb%b6%81-%ec%97%ac%ec%84%b1-%ea%b5%90%ec%9c%a1-%ea%b3%b5%eb%b6%80%ed%95%98%eb%8b%a4-3087585/",
-            password: req.body.password,
+            profile_image: req.body.picture,
             email: req.body.email,
-            address: account.address,
             created_at: new Date(),
-            google_id : req.body.google_id
+            google_id : req.body.email,
+            address,
+            salt,
+            doubleHashedPassword,
+            hashedPrivateKey,
         });
         /*
         let answer = await getBalance(req.body.address).then((balance) => {

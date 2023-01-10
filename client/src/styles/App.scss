@@ -4,6 +4,7 @@
 @import './Explore.scss';
 @import './Makepost.scss';
 @import './Loading.scss';
+@import './Signin.scss';
 
 $--main-background-color : rgb(21, 32, 43);
 $--main-hover-color : rgba(15,20,25,0.2);
@@ -58,6 +59,7 @@ body{
 
 }
 .App{
+    position: relative;
     display: flex;
     justify-content: center;
 }
