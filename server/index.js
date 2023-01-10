@@ -3,7 +3,13 @@ require("dotenv").config();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const Web3 = require("web3");
+const cron = require("node-cron");
+const pm2 = require('pm2');
 
+const rpcURL = process.env.INFURAURL;
+const web3 = new Web3(rpcURL);
+const Contract = web3.eth.Contract;
 
 //디비 연결
 const connect = require("./schemas/connection");

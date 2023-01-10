@@ -31,9 +31,7 @@ router.get('/serach', async (req,res,next) => {
         next(err);
     }
 });
-router.get('/mypost',async (req,res,next) => {
 
-});
 router.post('/bookmark',async (req,res,next) => {
     let user_name = req.body.user_name;
     let postname = req.body.post_name;
@@ -69,7 +67,5 @@ router.get('/bookmark',async (req,res,next) => {
         bookmarkdata = await Post.find({$or: query});
         return res.status(200).json(bookmarkdata);
     }
-    // 이 유저의 bookmark한 postname을 프론트로 보내줄것은 post의 콘텐츠
-    
 });
 module.exports = router;
