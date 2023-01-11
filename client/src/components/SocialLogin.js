@@ -5,7 +5,7 @@ import { UserContext } from '../context/LoginContext';
 import Loading from './Loading';
 
 const SocialLogin = () => {
-    const {accessToken, setAccessToken} = useContext(UserContext);
+    const {setAccessToken, setUserInfo} = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,15 +22,30 @@ const SocialLogin = () => {
         })
         .then(res => res.data)
         .then(res=>{
+            //2. db에 조회
             axios.get(`http://localhost:8080/users?email=${res.email}`)
             .then(res=>{
                 const user = res.data;
+                
+                //4. 없으면 회원가입연결
                 if(user.length===0) {
                     navigate(`/signin?token=${token}`);
                 }
+                //3. 있으면 로그인
                 else {
-                    localStorage.setItem('accessToken',token);
-                    window.location.replace('/');
+                    console.log(user);
+                    setUserInfo({
+                        id: user[0].nickname,
+                        email: user[0].email,
+                        picture: user[0].profile_image,
+                        verified_email: null,
+                        token_amount: user[0].token_amount/1_000_000_000_000_000,
+                        address: user[0].address
+                    })
+                    setAccessToken(token);
+                    // localStorage.setItem('accessToken',token);
+                    // window.location.replace('/');
+                    navigate('/');
                 }
             })
             .catch(err=>{
@@ -41,9 +56,6 @@ const SocialLogin = () => {
         .catch(err=>{               
             console.log('토큰으로 user정보 가져오기 불가',err);
         });
-        //2. db에 조회
-        //3. 있으면 로그인
-        //4. 없으면 회원가입연결
 
     }, []);
     

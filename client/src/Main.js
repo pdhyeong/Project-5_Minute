@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Footer from './components/Footer';
 import { Routes,Route } from 'react-router-dom';
 import Mypage from './pages/Mypage';
@@ -12,11 +12,33 @@ import SocialLogin from './components/SocialLogin';
 import axios from 'axios';
 import Redirect from './components/Redirect';
 import SignIn from './components/SignIn';
+import PostView from './components/PostView';
 
 
 const Main = () => {
     const {accessToken, setAccessToken, userInfo, setUserInfo} = useContext(UserContext);
+    const [Nft,setNft] = useState([]);
+    const [postData,setPostData] = useState([]);
+    const [isFetchingNft,setIsFetcingNft] = useState(false);
     
+    const getUserNft = async (address) => {
+        const response = await axios.get(`http://localhost:8080/nft?address=${address}`);
+        if(!response.ok) new Error(response.statusText);
+        setNft(response.data);
+        
+        console.log(Nft);
+    }
+    const getPostData = async () => {
+        axios.get('http://localhost:8080/post')
+        .then(res=>res.data)
+        .then(res=>{
+            setPostData(res);
+            console.log(postData);
+        })
+        
+    
+    }
+
 
     const getUserInfoByAccessToken = async (accessToken) => {
         
@@ -36,19 +58,20 @@ const Main = () => {
     };    
 
 
-    
 
     useEffect(()=>{
-        const storedAccessToken =  (localStorage.getItem('accessToken'));
-        if(storedAccessToken && accessToken===null){
-            getUserInfoByAccessToken(storedAccessToken)
-            .then((result)=>{
-                console.log(result);
-                setUserInfo(result);
-            })
-            setAccessToken(storedAccessToken);
+        const storedAccessToken =  localStorage.getItem('accessToken');
+        if(storedAccessToken===null&&accessToken){
+            localStorage.setItem('accessToken',accessToken);
+            // getUserInfoByAccessToken(accessToken)
+            // .then((result)=>{
+            //     console.log(result);
+            //     // setUserInfo(result);
+            // })
+            
         }
-        else if(accessToken){
+        else if(accessToken===null&&storedAccessToken){
+            setAccessToken(storedAccessToken);
             console.log('Logged In')
         }
         else{
@@ -56,6 +79,33 @@ const Main = () => {
         }
     },[accessToken]);
 
+    useEffect(()=>{
+        const storedUserInfo =  JSON.parse(localStorage.getItem('userInfo'));
+        if(storedUserInfo===null&&userInfo.id!==null){
+
+            localStorage.setItem('userInfo',JSON.stringify(userInfo));
+            
+        }
+        else if(userInfo.id===null&&storedUserInfo!==null){
+            setUserInfo(storedUserInfo);
+            console.log('Logged In')
+        }
+        else{
+            console.log('Logged Out');
+        }
+    },[userInfo]);
+    
+    useEffect(()=>{
+        const storedUserInfo =  JSON.parse(localStorage.getItem('userInfo'));
+        if(storedUserInfo){
+            setIsFetcingNft(true);
+            getUserNft(storedUserInfo.address)
+            .then(()=>{
+                setIsFetcingNft(false);
+            });
+        }
+        getPostData();
+    },[]);
 
 
     return (
@@ -63,17 +113,18 @@ const Main = () => {
             <div className='main-contents-container'>
                 <SearchBar></SearchBar>
                 <Routes>
-                    <Route path='/' element={<PostLayout />}></Route>
-                    <Route path='/mypage' element={accessToken?<Mypage></Mypage>:<Redirect></Redirect>}></Route>
+                    <Route path='/' element={<PostLayout postData={postData} />}></Route>
+                    <Route path='/mypage' element={accessToken?<Mypage postData={postData} Nft={Nft} isFetchingNft={isFetchingNft}></Mypage>:<Redirect></Redirect>}></Route>
                     <Route path='/bookmark' element={accessToken?<Bookmark></Bookmark>:<Redirect></Redirect>}></Route>
-                    <Route path='/explore' element={<Explore></Explore>}></Route>
+                    <Route path='/explore' element={<Explore postData={postData}></Explore>}></Route>
                     <Route path='/post' element={accessToken?<MakePost></MakePost>:<Redirect></Redirect>}></Route>
                     <Route path='/redirect' element={<SocialLogin></SocialLogin>}></Route>
                     <Route path='/signin' element={<SignIn></SignIn>}></Route>
+                    <Route path='/detail/:postid' element={<PostView postData={postData}/>}></Route>
                 </Routes>
             </div>
             <div className='main-footer-container'>
-                <Footer ></Footer>
+                <Footer Nft={Nft} isFetchingNft={isFetchingNft}></Footer>
             </div>
         </main>
     );

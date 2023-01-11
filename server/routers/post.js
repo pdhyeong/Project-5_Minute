@@ -3,15 +3,27 @@ const router = express.Router();
 const Post = require('../schemas/post');
 const User = require('../schemas/users');
 
+
+router.get('/',async(req,res,next)=>{
+    try {
+        const showpost = await Post.find({});
+        res.json(showpost);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+})
 router.post('/',async(req,res,next) => {
     try {
         const postcontent = await Post.create({
         user_name: req.body.user_name,
         like: req.body.like,
         problem_name: req.body.problem_name,
+        profile_image: req.body.profile_image,
         title: req.body.title,
         content: req.body.content,
-        created_at : new Date()
+        created_at : new Date(),
+        address: req.body.address,
     });
     res.status(201).json(postcontent);
 

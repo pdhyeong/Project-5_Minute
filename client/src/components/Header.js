@@ -6,7 +6,7 @@ import { UserContext } from '../context/LoginContext';
 
 
 const Header = () => {
-    const {accessToken, setAccessToken, userInfo} =
+    const {accessToken, setAccessToken, userInfo, setUserInfo} =
     useContext(UserContext);
 
     const handleLogout = async () => {
@@ -16,10 +16,13 @@ const Header = () => {
           .then(() => {
             localStorage.clear();
             setAccessToken(null);
+            setUserInfo(null);
             window.location.assign("http://localhost:3000/");
-            
           })
           .catch(() => {
+            localStorage.clear();
+            setAccessToken(null);
+            setUserInfo(null);
             alert("로그아웃에 실패했습니다.");
           });
       };
