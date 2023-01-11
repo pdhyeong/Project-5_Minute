@@ -23,8 +23,4 @@ router.get('/mypost',async (req,res,next) => {
     const mypost = await Post.find({user_name : `${user_name}`});
     return res.status(200).json(mypost);
 });
-
-router.put('/changeprofile',async (req,res,next) => {
-    
-});
 module.exports = router;

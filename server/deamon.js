@@ -4,6 +4,8 @@ const cron = require("node-cron");
 const pm2 = require('pm2');
 require('dotenv').config();
 //const models = require("./models");
+const connect = require("./schemas/connection");
+connect();
 const User = require('./schemas/users');
 const nftSchema = require('./schemas/nft');
 // web3연결
@@ -13,380 +15,62 @@ const rpcURL = process.env.INFURAURL;
 
 const web3 = new Web3(rpcURL);
 const Contract = web3.eth.Contract;
-
+const abi = require('./erc20_abi');
+console.log(abi);
 const findevent = async (user_name) => {
-	// 노드의 최신블록넘버 조회
-	// const getLatestBlock = await web3.eth.getBlockNumber();
+	 try {
+		const contractAddr = process.env.ERC20_CA;
+		const userinfo = await User.find({nickname : user_name});
+		let useraddress = userinfo[0].address;
+		console.log(useraddress);
+    	const contract = new Contract(abi.erc20_abi,contractAddr);
+		let options = {
+			    fromBlock: 0,
+			    address: [contractAddr,useraddress],    //Only get events from specific addresses
+			    topics: []                              //What topics to subscribe to
+			};
+    let subscription = web3.eth.subscribe('logs', options,(err,event) => {
+        if (!err)
+        console.log(event);
+    });
+	// erc20은 transfer이벤트를 확인해야한다.
 
-	// // 블록정보
-	// let blockn = await web3.eth.getBlock(getLatestBlock);
+	// 유저간의 잔고차이를 바인딩해줘야하고
 
-	// // 트랜잭션정보
+	// 잔고가 바뀔때는 트랜잭션이 바뀔테니까 transfer가 발생하면 그 때 유저사이의 잔고를 조정해주기
 
-	//  const txInfo = await web3.eth.getTransaction(blockn.transactions[0]);
+	//erc1155 는 transfer를 감지해서 user한테 그 
+	console.log(subscription);
+    console.log("잘실행중");
+    subscription.on('data', event => console.log(event))
+    subscription.on('changed', changed => {
+		// 
+		if(changed){
 
-	// // 충환님이 보낸 컨트렉트 CA주소를 확인해보기
+		}
+		else {
 
- 	// console.log(getLatestBlock,blockn,txInfo.from);
+		}
+	});
+    subscription.on('connected', nr => console.log(nr));
 
-	 const abi = [
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "spender",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "Approval",
-            "type": "event"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "spender",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "approve",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "burn",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "mint",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "previousOwner",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "OwnershipTransferred",
-            "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "renounceOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transfer",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "from",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "to",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "Transfer",
-            "type": "event"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transferFrom",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transferFromDeployer",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "transferOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "allowance",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "balanceOf",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "decimals",
-            "outputs": [
-                {
-                    "internalType": "uint8",
-                    "name": "",
-                    "type": "uint8"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "name",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "owner",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "symbol",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "totalSupply",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        }
-    ];
-	
-	 const contractAddr = `${process.env.ERC20_CA}`;
-	 const contract = new Contract(abi,contractAddr);
-	 let userinfo = [User.find({nickname : `${user_name}`})];
-	 console.log(userinfo);
-	 let useraddress = userinfo[0].address;
-
-	 let options = {
-		 fromBlock: 0,
-		 address: [`${process.env.ERC20_CA}`,`${useraddress}`],    //Only get events from specific addresses
-		 topics: []                              //What topics to subscribe to
-	 };
-	 
-	 let subscription = await web3.eth.subscribe('logs', options,(err,event) => {
-		 if (!err)
-		 console.log(event)
-	 });
-
-	 subscription.on('data', event => console.log(event))
-	 subscription.on('changed', changed => console.log(changed))
-	 subscription.on('connected', nr => console.log(nr))
+	} catch (err) {
+		console.log(err);
+		return err;
+	}
 }
+findevent("slstls218");
 // 블록이나 트랜잭션으로부터 필요한 정보를 DB에 저장합니다.
 
 
 // 매 초마다 실행 (실행주기를 설정할 수 있습니다.)
-
+/*
 const task = cron.schedule(
 	"* * * * * *",
 	async () => {
 		// 주기적으로 실행하고자 하는 함수
 		// 예시
-		findevent('jihyo');
+		
 	},
 	{
 		scheduled: false,
@@ -411,3 +95,4 @@ const task = cron.schedule(
 // 		}            
 // });
 task.start();
+*/

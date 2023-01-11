@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   nickname: {type: String},
   profile_image: {type: String},
-  password: {type: String},
+  doubleHashedPassword: {type: String},
   email: {type: String},
   hashpassword: {type: String},
   hashprivate_key : {type: String},
@@ -15,6 +15,8 @@ const userSchema = new Schema({
   eth_amount: {type: Number},
   created_at: {type: Date,default: Date.now},
   problem_name: [{type: String,ref:'Problem'}],
-  google_id: {type: String}
+  google_id: {type: String},
+  salt: {type: String},
+  hashedPrivateKey: {type:String},
 })
 module.exports = mongoose.model('User', userSchema);

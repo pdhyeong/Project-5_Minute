@@ -5,17 +5,31 @@ const User = require('../schemas/users');
 
 router.post('/',async(req,res,next) => {
     try {
-        const postcontent = await Post.create({
-        user_name: req.body.user_name,
-        like: req.body.like,
-        problem_name: req.body.problem_name,
-        title: req.body.title,
-        hash_title: [req.body.hash_title],
-        content: req.body.content,
-        created_at : new Date()
-    });
-    res.status(201).json(postcontent);
+        let user_name = req.body.user_name
+        let like = 0
+        let problem_name = req.body.problem_name
+        let hash_title = req.body.hash_title
+        let title = req.body.title
+        let content = req.body.content
+        let created_at = new Date()
 
+        let finduser = User.find({nickname: user_name});
+
+        if(finduser) {
+            const postcontent = await Post.create({
+                user_name: user_name,
+                like: like,
+                problem_name: problem_name,
+                hash_title : hash_title,
+                title: title,
+                content: content,
+                created_at : created_at
+        });
+        return res.status(201).json(postcontent);
+        }
+        else {
+            return res.status(500).send("name parameter does not exist");
+        }
     } catch (err) {
         console.log(err);
         next(err);
@@ -24,8 +38,13 @@ router.post('/',async(req,res,next) => {
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;
-        const showpost = await Post.find({"problem_title": `${problem_title}`});
-        res.json(showpost);
+        if(problem_title){
+            const showpost = await Post.find({"problem_title": `${problem_title}`});
+            return res.json(showpost);
+        }
+        else {
+            return res.status(500).send("Query parameter does not exist");
+        }
     } catch (err) {
         console.error(err);
         next(err);

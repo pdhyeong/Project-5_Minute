@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Web3 = require('web3');
 const User = require('../schemas/users');
+const {createUserAddr} = require('../web3')
 
 
 const rpcURL = process.env.INFURAURL;
@@ -10,25 +11,32 @@ const web3 = new Web3(rpcURL);
 
 router.get('/',async(req,res,next) => {
     try{
-        const users = await User.find({nickname: 'BtsJin'}); 
-        return res.json(users[0].address);
+        
+        const users = await User.find({"email":req.query.email}); 
+        console.log(users);
+        res.json(users);
     } catch (err) {
         console.error(err);
         next(err);
     }
 });
 router.post('/',async (req,res,next) => {
+    console.log(req.body);
     try{
-        let account = web3.eth.accounts.create();
-        console.log(account);
+        const {address,salt,doubleHashedPassword,hashedPrivateKey} = await createUserAddr(req.body.password);
+        console.log(address,salt,doubleHashedPassword,hashedPrivateKey);
+
+
         const user = await User.create({
             nickname: req.body.nickname,
-            profile_image: req.body.profile_image,
-            password: req.body.password,
+            profile_image: req.body.picture,
             email: req.body.email,
-            address: account.address,
             created_at: new Date(),
-            google_id : req.body.google_id
+            google_id : req.body.email,
+            address,
+            salt,
+            doubleHashedPassword,
+            hashedPrivateKey,
         });
         /*
         let answer = await getBalance(req.body.address).then((balance) => {

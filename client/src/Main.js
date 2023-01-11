@@ -11,6 +11,7 @@ import { UserContext } from './context/LoginContext';
 import SocialLogin from './components/SocialLogin';
 import axios from 'axios';
 import Redirect from './components/Redirect';
+import SignIn from './components/SignIn';
 
 
 const Main = () => {
@@ -39,18 +40,12 @@ const Main = () => {
 
     useEffect(()=>{
         const storedAccessToken =  (localStorage.getItem('accessToken'));
-        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-       
         if(storedAccessToken && accessToken===null){
-            if(storedUserInfo ) setUserInfo(storedUserInfo);
-            else getUserInfoByAccessToken(storedAccessToken)
+            getUserInfoByAccessToken(storedAccessToken)
             .then((result)=>{
                 console.log(result);
                 setUserInfo(result);
-                localStorage.setItem('useInfo',JSON.stringify(result));;
             })
-
-
             setAccessToken(storedAccessToken);
         }
         else if(accessToken){
@@ -74,6 +69,7 @@ const Main = () => {
                     <Route path='/explore' element={<Explore></Explore>}></Route>
                     <Route path='/post' element={accessToken?<MakePost></MakePost>:<Redirect></Redirect>}></Route>
                     <Route path='/redirect' element={<SocialLogin></SocialLogin>}></Route>
+                    <Route path='/signin' element={<SignIn></SignIn>}></Route>
                 </Routes>
             </div>
             <div className='main-footer-container'>

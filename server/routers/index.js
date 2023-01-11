@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Post = require('../schemas/post');
-const nft = require('../schemas/nft');
+const Nft = require('../schemas/nft');
 
 router.get("/", async (req,res,next) => {
     const count = req.query.count;
@@ -21,21 +21,6 @@ router.get("/", async (req,res,next) => {
     }
     else {
         return res.status(500).send("post not exist");
-    }
-});
-// nft 테이블을 유저와 연결되어있는데
-router.get("/shownft",async (req,res,next) => {
-    const name = req.query.user_name;
-    try {
-        if(name){
-            
-        }
-        else {
-
-        }
-    } catch(err) {
-        console.log(err);
-        return err;
     }
 });
 module.exports = router;
