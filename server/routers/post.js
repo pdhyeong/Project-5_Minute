@@ -14,51 +14,34 @@ router.get('/',async(req,res,next)=>{
     }
 })
 router.post('/',async(req,res,next) => {
-    let userinfo = await User.find({nickname : req.body.user_name});
-
-    let profile_image;
-    let user_name = req.body.user_name;
-    let like = Math.floor(Math.random() * 1234567);
-    let problem_name = req.body.problem_name;
-    let title = req.body.title;
-    let hash_title = req.body.hash_title;
-    let content = req.body.content;
-    let created_at = new Date();
-    let address;
-
-
-    if(userinfo){
-        profile_image = userinfo[0].profile_image;
-        address = userinfo[0].address;
-    }
-    else {
-        profile_image = "";
-        address = "";
-    }
     try {
-        if(finduser) {
-        const postcontent = await Post.create({
-            user_name: user_name,
+        let userinfo = await User.find({nickname : req.body.user_name});
+
+        if (userinfo) {
+            let address = userinfo[0].address;
+            let profile_image = userinfo[0].profile_image;
+
+
+            const postcontent = await Post.create({
+            user_name: req.body.user_name,
+            like: Math.floor(Math.random() * 1234567),
+            problem_name: req.body.problem_name,
             profile_image: profile_image,
-            like: like,
-            problem_name: problem_name,
-            hash_title : hash_title,
-            title: title,
-            content: content,
-            created_at : created_at,
-            address : address
-        });
+            title: req.body.title,
+            content: req.body.content,
+            created_at : new Date(),
+            address: address,
+    });
         return res.status(201).json(postcontent);
-        }
-        else {
-            return res.status(500).send("name parameter does not exist");
-        }
+    } 
+    else  {
+        return res.status(500).send("You need to log in to post");
+    }
     } catch (err) {
         console.log(err);
         next(err);
     }
 });
-
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;

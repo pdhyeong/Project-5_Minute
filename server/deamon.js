@@ -71,7 +71,6 @@ const findNFTevent = async () => {
 			},
 			fromBlock: await web3.eth.getBlockNumber()
 		};
-		console.log(contract.events.TransferBatch(options));
 		contract.events.TransferBatch(options)
 			.on('data', async event => {
 				try{

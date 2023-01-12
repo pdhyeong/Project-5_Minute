@@ -25,7 +25,6 @@ router.get('/',async(req,res,next) => {
     }
 });
 router.post('/',async (req,res,next) => {
-    console.log(req.body);
     try{
         const {address,salt,doubleHashedPassword,hashedPrivateKey} = await createUserAddr(req.body.password);
         console.log(address,salt,doubleHashedPassword,hashedPrivateKey);
