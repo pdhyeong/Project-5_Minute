@@ -20,6 +20,7 @@ const Main = () => {
     const [Nft,setNft] = useState([]);
     const [postData,setPostData] = useState([]);
     const [isFetchingNft,setIsFetcingNft] = useState(false);
+    console.log(Nft);
     
     const getUserNft = async (address) => {
         const response = await axios.get(`http://localhost:8080/nft?address=${address}`);
@@ -35,8 +36,6 @@ const Main = () => {
             setPostData(res);
             console.log(postData);
         })
-        
-    
     }
 
 
@@ -72,10 +71,10 @@ const Main = () => {
         }
         else if(accessToken===null&&storedAccessToken){
             setAccessToken(storedAccessToken);
-            console.log('Logged In')
+            // console.log('Logged In')
         }
         else{
-            console.log('Logged Out');
+            // console.log('Logged Out');
         }
     },[accessToken]);
 
@@ -88,10 +87,10 @@ const Main = () => {
         }
         else if(userInfo.id===null&&storedUserInfo!==null){
             setUserInfo(storedUserInfo);
-            console.log('Logged In')
+            // console.log('Logged In')
         }
         else{
-            console.log('Logged Out');
+            // console.log('Logged Out');
         }
     },[userInfo]);
     
@@ -113,14 +112,14 @@ const Main = () => {
             <div className='main-contents-container'>
                 <SearchBar></SearchBar>
                 <Routes>
-                    <Route path='/' element={<PostLayout postData={postData} />}></Route>
-                    <Route path='/mypage' element={accessToken?<Mypage postData={postData} Nft={Nft} isFetchingNft={isFetchingNft}></Mypage>:<Redirect></Redirect>}></Route>
+                    <Route path='/' element={<PostLayout setPostData={setPostData} postData={postData} />}></Route>
+                    <Route path='/mypage' element={accessToken?<Mypage setPostData={setPostData} postData={postData} Nft={Nft} isFetchingNft={isFetchingNft}></Mypage>:<Redirect></Redirect>}></Route>
                     <Route path='/bookmark' element={accessToken?<Bookmark></Bookmark>:<Redirect></Redirect>}></Route>
-                    <Route path='/explore' element={<Explore postData={postData}></Explore>}></Route>
+                    <Route path='/explore' element={<Explore setPostData={setPostData} postData={postData}></Explore>}></Route>
                     <Route path='/post' element={accessToken?<MakePost></MakePost>:<Redirect></Redirect>}></Route>
                     <Route path='/redirect' element={<SocialLogin></SocialLogin>}></Route>
                     <Route path='/signin' element={<SignIn></SignIn>}></Route>
-                    <Route path='/detail/:postid' element={<PostView postData={postData}/>}></Route>
+                    <Route path='/detail/:postid' element={<PostView setPostData={setPostData} postData={postData}></PostView>}></Route>
                 </Routes>
             </div>
             <div className='main-footer-container'>

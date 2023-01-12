@@ -23,21 +23,30 @@ const MakePost = () => {
     }, []);
 
     const handleButtonClick = ()=>{
-        callback();
-        axios.post('http://localhost:8080/post',{
-            user_name: userInfo.email.split('@')[0],
-            profile_image: userInfo.profile_image,
-            problem_name: 1,
-            title: descriptions.title,
-            hash_title: [],
-            content: descriptions.content,
-            address: userInfo.address,
-        })
-        .then(res=>{
-            console.log('글쓰기 성공');
-            navigate('/');
-        })
-        .catch(err=>console.log('글쓰기 실패',err));
+        if(descriptions.title===''){
+            alert('제목을 입력해주세요')   
+        }else if(descriptions.content===''){
+            alert('내용을 입력해주세요')
+        }else{
+            callback();
+            axios.post('http://localhost:8080/post',{
+                user_name: userInfo.email.split('@')[0],
+                profile_image: userInfo.picture,
+                problem_name: 1,
+                title: descriptions.title,
+                hash_title: [],
+                content: descriptions.content,
+                address: userInfo.address
+            })
+            .then(res=>{
+                console.log('글쓰기 성공');
+                window.location.replace('/');
+            })
+            .catch(err=>{
+                console.log('글쓰기 실패',err);
+                window.location.replace('/');
+            });
+        }
     }
 
     const handleInputChange = (e) => {

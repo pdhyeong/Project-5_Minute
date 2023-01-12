@@ -227,15 +227,18 @@ body{
         width: 50px;
         height: 50px;
 
-        background-color: black;
+        background-color: orange;
         flex-shrink: 0;
         margin-right: 10px;
+        border-radius: 9999px;
+        overflow: hidden;
 
 
-        // &>img{
-        //     width: 50px;
-        //     height: 100%;
-        // }
+        &>img{
+            width: 50px;
+            height: 50px;
+            
+        }
     }
 
     &__contents{
@@ -256,17 +259,124 @@ body{
             display: flex;
             gap: 10px;
 
-            & > div{
+            &__item{
+                display: flex;
+                align-items: center;
+
+                color: $--sub-color;
                 cursor: pointer;
-                &:hover{
-                    background-color: $--main-border-color;
-                }
                 padding: 10px;
+
+                & > svg {
+                    height: 20px;
+                    fill: $--sub-color;
+                }
+                &> span{
+                    margin-left: 10px;
+                }
             }
         }
     }
+}
+.hashtag{
+    border-radius: 9999px;
+    color: $--sub-color;
+
+    padding: 5px;
+    &:hover{
+        background-color: $--sub-color;
+        color: rgb(220, 175, 92);
+    }
+}
 
 
+
+
+.like-clicked{
+    color: pink;
+    fill: pink !important;
+}
+
+.award-clicked{
+    color: orange;
+    fill: orange !important;
+}
+
+.space-arround{
+    justify-content: space-evenly;
+}
+.green-hover:hover > svg{
+    fill: green;
+    color: green;
+}
+
+.green-hover:hover > span{
+    fill: green;
+    color: green;
+}
+
+.pink-hover:hover > svg{
+    fill: pink;
+    color: pink;
+}
+
+.pink-hover:hover > span{
+    fill: pink;
+    color: pink;
+}
+
+.orange-hover:hover > svg{
+    fill: orange;
+}
+
+.orange-hover:hover > span{
+    color: orange;
+}
+.orange-hover{
+    position: relative;
+}
+
+.award-nft{
+    padding: 16px;
+    position: absolute;
+    background-color: rgba( #38444d,0.9);
+    
+    bottom: 40px;
+    border-radius: 10px;
+    &>h2{
+        color: #ddd;
+        margin: 0;
+        border-bottom: 1px solid #ddd;
+    }
+    &__container{
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+    &__award{
+        padding: 10px;
+        width: max-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        &:hover{
+            background-color: $--main-hover-color;
+            border-radius: 10px;
+        }
+        &>img{
+            width: 50px;
+        }
+        &>p{
+            color: #ddd;
+            font-size: 0.5rem;
+        }
+    }
+}
+
+.active{
+    color: orange;
+    font-weight: bold;
 }
 
 .createpost{

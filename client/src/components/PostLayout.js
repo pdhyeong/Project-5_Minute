@@ -4,15 +4,15 @@ import { UserContext } from '../context/LoginContext';
 import CreatePost from './CreatePost';
 import Post from './Post';
 
-const PostLayout = ({postData}) => {
+const PostLayout = ({setPostData,postData}) => {
     const {accessToken} = useContext(UserContext);
     return (
         <div className='postlayout'>
             {accessToken&&<CreatePost></CreatePost>}
             {
-                postData.length!==0&&postData.map((e,i)=>{
-                    return <Link to={'detail/'+i}>
-                        <Post key={i} postData={e}></Post>
+                postData.length!==0&&[...postData].reverse().map((e,i)=>{
+                    return <Link key={i} to={'detail/'+i}>
+                        <Post setPostData={setPostData} postData={e}></Post>
                     </Link>
                 })
             }
