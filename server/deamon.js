@@ -19,19 +19,19 @@ const rpcURL = process.env.WSS;
 const web3 = new Web3(rpcURL);
 const Contract = web3.eth.Contract;
 
+const {SendNFT} = require('./web3')
 
 const findevent = async () => {
 	 try {
 		const contractAddr = process.env.ERC20_CA;
+		const contract = new Contract(erc20abi.erc20_abi,contractAddr);
 
-    	 const contract = new Contract(erc20abi.erc20_abi,contractAddr);
 		let options = {
 			filter: {
 				value: [],
 			},
 			fromBlock: await web3.eth.getBlockNumber()
 		};
-		console.log(contract.events.Transfer(options));
 		contract.events.Transfer(options)
 			.on('data', async event => {
 				try{
@@ -65,6 +65,7 @@ const findNFTevent = async () => {
 		const contractAddr = process.env.ERC1155_CA;
 
     	 const contract = new Contract(erc1155abi.erc1155_abi,contractAddr);
+
 		let options = {
 			filter: {
 				value: [],
@@ -95,5 +96,6 @@ const findNFTevent = async () => {
 		return err;
 	}
 }
+SendNFT("0x3eDEf699ADd0b1fee6377344951812051A1C0a7d",0);
 findevent();
 findNFTevent();

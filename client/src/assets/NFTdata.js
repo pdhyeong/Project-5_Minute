@@ -10,6 +10,5 @@ const NFTdata = [
 {id: 2, price:50, name: 'Platinum Award', description: '', image: 'https://www.redditstatic.com/gold/awards/icon/platinum_128.png'},
 
 {id: 3, price:10, name: 'Gold Award', description: '', image: 'https://www.redditstatic.com/gold/awards/icon/gold_128.png'},
-]
-
-export default NFTdata;
+];
+module.exports = NFTdata;

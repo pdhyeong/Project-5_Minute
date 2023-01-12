@@ -131,6 +131,15 @@ module.exports = {
         }catch(err){
             console.log(err);
         }
+    },
+    SendNFT: async (to,id) => {
+            const Contract = web3.eth.Contract;
+            const contract = new Contract(erc1155_abi,process.env.ERC1155_CA);
+
+            // sendnft는 받는 사람의 nft주소로 새로 하나 입력받은 id nft발행한다.
+
+            let method = await contract.methods.mintBatch(to,id,1,[]);
+            console.log(method);
     }
 
 }
