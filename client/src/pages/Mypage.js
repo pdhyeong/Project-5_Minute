@@ -1,14 +1,17 @@
 /* eslint-disable no-undef */
 import React, { useState,useEffect, useContext } from 'react';
 import profile from '../assets/레오쓰.jpeg'
+import Loading from '../components/Loading';
 import Post from '../components/Post';
 import { UserContext } from '../context/LoginContext';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
-const Mypage = () => {
+const Mypage = ({Nft, isFetchingNft, postData}) => {
     const {userInfo} = useContext(UserContext);
     const [tap,setTap] = useState(0);
-    const SERVER_URL = '';
+    const SERVER_URL = 'http://localhost:8080';
     const [image,setImage] = useState({
         image_file: '',
         preview_URL: profile,
@@ -32,14 +35,16 @@ const Mypage = () => {
               image_file: newImageFile,
               preview_URL,
             })
-          }
+            console.log(newImageFile)
+        }
     }
 
-    const postImageToServer = async () => {
+    const postImageToServer = async ()  => {
         if(image.image_file){
             const formData = new FormData()
             formData.append('file', image.image_file);
-            await axios.post( SERVER_URL , formData);
+            console.log(formData);
+            await axios.post( SERVER_URL +'/profileimg', formData);
             alert("서버에 등록이 완료되었습니다!");
             setImage({
               image_file: "",
@@ -62,6 +67,7 @@ const Mypage = () => {
                     <img src={image.preview_URL}></img>
                     {/* <img src={image.preview_URL}></img> */}
                 </div>
+                <span onClick={postImageToServer}>  upload  </span>
 
             </div>
             <div className='mypage__background__spacer'>
@@ -83,8 +89,17 @@ const Mypage = () => {
                 <h3>{userInfo.email.split('@')[0]}</h3>
                 <span>@{userInfo.email.split('@')[0]}</span>
                 <p>가입일: 2022년 10월</p>
-                <div>
-                    획득 뱃지 <span>a</span><span>b</span><span>c</span><span>d</span>
+                <div className='mypage__profile__contents__mynft'>
+                    획득한 뱃지 
+                    {
+                        isFetchingNft
+                        ?<Loading></Loading>
+                        :Nft.map((e,i)=>{
+                            return <div key = {i} className='mypage__profile__contents__mynft__nft' >
+                                <img src={e.image}></img>
+                            </div>
+                        })
+                    }
                 </div>
             </div>
             <div className='mypage__contents'>
@@ -93,14 +108,35 @@ const Mypage = () => {
                     <div onClick={()=>{setTap(1)}} className={tap===1?'mypage__contents__tap__item tap-hover':'mypage__contents__tap__item'} >POST</div>
                 </div>
                 {
-                    tap===1&&<div>
-                        <Post></Post>
-                        <Post></Post>
-                        <Post></Post>
-                        <Post></Post>
-                        <Post></Post>
-                        <Post></Post>
+                    tap===0
+                    ?<div className='mypage__contents__container'>
+                        <p>내 지갑 주소 : {userInfo.address}</p>
+                        <p>나의 ST토큰 개수: {userInfo.token_amount}</p>
+                        <p>내가 받은 NFT</p>
+                        <div className='mypage__contents__nftcontainer'>
+                        {   
+                            isFetchingNft
+                            ?<Loading></Loading>
+                            :Nft.map((e,i)=>{
+                                return <div key = {i} className='mypage__contents__mynft' >
+                                    <img src={e.image}></img>
+                                    <div>{e.name}</div> 
+                                </div>
+                            })
+                        }
+                        </div>
                     </div>
+                    :<div>
+                        {
+                            postData.length!==0&&postData.map((e,i)=>{
+                                if(e.user_name===userInfo.email.split('@')[0])
+                                return <Link to={'../detail/'+i}>
+                                    <Post key={i} postData={e}></Post>
+                                </Link>
+                            })
+                        }
+                    </div>
+
                     
                 }
             </div>

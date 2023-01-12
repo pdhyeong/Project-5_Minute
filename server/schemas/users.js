@@ -7,8 +7,6 @@ const userSchema = new Schema({
   doubleHashedPassword: {type: String},
   email: {type: String},
   hashpassword: {type: String},
-  hashprivate_key : {type: String},
-  salt : {type: String},
   address: {type: String},
   bookmark: [{type: String}],
   token_amount: {type: Number},

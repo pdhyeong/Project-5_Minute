@@ -322,5 +322,5 @@ const erc20_abi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
-module.exports = {erc20_abi};
+]
+module.exports = {erc20_abi}

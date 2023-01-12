@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 import RecommendTag from '../components/RecommendTag';
 
-const Explore = () => {
+const Explore = ({postData}) => {
     return (
         <div className='explore'>
             <div className='explore__recommend'>
@@ -12,12 +13,13 @@ const Explore = () => {
                 <RecommendTag></RecommendTag>
                 <RecommendTag></RecommendTag>
             </div>
-            <Post></Post>
-            <Post></Post>
-            <Post></Post>
-            <Post></Post>
-            <Post></Post>
-            <Post></Post>
+            {
+                postData.length!==0&&postData.map((e,i)=>{
+                    return <Link to={'detail/'+i}>
+                        <Post key={i} postData={e}></Post>
+                    </Link>
+                })
+            }
             <div className='explore__content'></div>
         </div>
     );

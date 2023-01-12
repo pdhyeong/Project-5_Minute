@@ -3,13 +3,13 @@ import { UserContext } from '../context/LoginContext';
 import MyNft from './MyNft';
 import MyRank from './MyRank';
 
-const Footer = () => {
+const Footer = ({Nft,isFetchingNft}) => {
     const {accessToken} = useContext(UserContext);
 
     return (
         <footer className='footer'>
             {accessToken&&<MyRank></MyRank>}
-            {accessToken&&<MyNft></MyNft>}
+            {accessToken&&<MyNft Nft={Nft} isFetchingNft={isFetchingNft} ></MyNft>}
             
             <div className='footer__copyright'>© 2023 5Minutes, All right reserved.</div>
         </footer>

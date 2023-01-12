@@ -8,10 +8,12 @@ import { UserContext } from './context/LoginContext';
 function App() {
   const [accessToken,setAccessToken] = useState(null);
   const [userInfo,setUserInfo] = useState({
-    id: '',
-    email: '',
-    picture: '',
+    id: null,
+    email: null,
+    picture: null,
     verified_email: null,
+    token_amount: null,
+    address: null,
   })
 
 

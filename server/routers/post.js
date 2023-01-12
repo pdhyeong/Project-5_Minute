@@ -3,27 +3,50 @@ const router = express.Router();
 const Post = require('../schemas/post');
 const User = require('../schemas/users');
 
-router.post('/',async(req,res,next) => {
+
+router.get('/',async(req,res,next)=>{
     try {
-        let user_name = req.body.user_name
-        let like = 0
-        let problem_name = req.body.problem_name
-        let hash_title = req.body.hash_title
-        let title = req.body.title
-        let content = req.body.content
-        let created_at = new Date()
+        const showpost = await Post.find({});
+        res.json(showpost);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+})
+router.post('/',async(req,res,next) => {
+    let userinfo = await User.find({nickname : req.body.user_name});
 
-        let finduser = User.find({nickname: user_name});
+    let profile_image;
+    let user_name = req.body.user_name;
+    let like = Math.floor(Math.random() * 1234567);
+    let problem_name = req.body.problem_name;
+    let title = req.body.title;
+    let hash_title = req.body.hash_title;
+    let content = req.body.content;
+    let created_at = new Date();
+    let address;
 
+
+    if(userinfo){
+        profile_image = userinfo[0].profile_image;
+        address = userinfo[0].address;
+    }
+    else {
+        profile_image = "";
+        address = "";
+    }
+    try {
         if(finduser) {
-            const postcontent = await Post.create({
-                user_name: user_name,
-                like: like,
-                problem_name: problem_name,
-                hash_title : hash_title,
-                title: title,
-                content: content,
-                created_at : created_at
+        const postcontent = await Post.create({
+            user_name: user_name,
+            profile_image: profile_image,
+            like: like,
+            problem_name: problem_name,
+            hash_title : hash_title,
+            title: title,
+            content: content,
+            created_at : created_at,
+            address : address
         });
         return res.status(201).json(postcontent);
         }
@@ -35,6 +58,7 @@ router.post('/',async(req,res,next) => {
         next(err);
     }
 });
+
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;

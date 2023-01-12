@@ -10,7 +10,7 @@ const erc20abi = require('./erc20_abi');
 const erc1155abi = require('./erc1155_abi');
 
 const User = require('./schemas/users');
-const nftSchema = require('./schemas/nft');
+const Nft = require('./schemas/nft');
 // web3연결
 
 const Web3 = require("web3");
@@ -31,7 +31,7 @@ const findevent = async () => {
 			},
 			fromBlock: await web3.eth.getBlockNumber()
 		};
-		console.log(contract.events);
+		console.log(contract.events.Transfer(options));
 		contract.events.Transfer(options)
 			.on('data', async event => {
 				try{
@@ -60,25 +60,25 @@ const findevent = async () => {
 		return err;
 	}
 }
-
 const findNFTevent = async () => {
 	try {
 		const contractAddr = process.env.ERC1155_CA;
 
     	 const contract = new Contract(erc1155abi.erc1155_abi,contractAddr);
-		 console.log(contract);
 		let options = {
 			filter: {
 				value: [],
 			},
 			fromBlock: await web3.eth.getBlockNumber()
 		};
-		
+		console.log(contract.events.TransferBatch(options));
 		contract.events.TransferBatch(options)
 			.on('data', async event => {
 				try{
 					if(event){
-						console.log(event);
+						let reciever_address = event.returnValues.to;
+						let sender_address = event.returnValues.from;
+						await Nft.updateOne({"owner_address": {user_address : sender_address}},{ $set : {owner_address : {user_address : reciever_address}}});
 					}
 					else {
 						return;
@@ -96,4 +96,5 @@ const findNFTevent = async () => {
 		return err;
 	}
 }
+findevent();
 findNFTevent();

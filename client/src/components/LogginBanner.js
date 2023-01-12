@@ -4,10 +4,11 @@ const GoogleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOG
 
 
 
+
+
 const LogginBanner = () => {
 
     const oAuthHandler = () => {
-
         window.location.assign(GoogleURL);
     };
 

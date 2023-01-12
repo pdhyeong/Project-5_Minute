@@ -5,7 +5,7 @@ import logo from '../assets/logo.png'
 import { UserContext } from '../context/LoginContext';
 
 const SignIn = () => {
-    const {setAccessToken} = useContext(UserContext);
+    const {setAccessToken,setUserInfo} = useContext(UserContext);
     const [password,setPassword] = useState();
     const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ const SignIn = () => {
         })
         .then(res => res.data)
         .then(res =>{
+            
             axios.post('http://localhost:8080/users',{
                 
                 nickname: res.email.split('@')[0],
@@ -34,9 +35,19 @@ const SignIn = () => {
                 google_id : res.email,
             
             }).then(res=>{
-                console.log(res);
-                localStorage.setItem('accessToken',token);
-                window.location.replace('/');
+                console.log(res.data);
+                setUserInfo({
+                    id: res.data.nickname,
+                    email: res.data.email,
+                    picture: res.data.profile_image,
+                    verified_email: null,
+                    token_amount: res.data.token_amount/1_000_000_000_000_000_000,
+                    address: res.data.address,
+                })
+                setAccessToken(token);
+                // localStorage.setItem('accessToken',token);
+                // window.location.replace('/');
+                navigate('/');
             })
         })
         .catch(err => console.log('user정보 못불러옴',err));
@@ -59,6 +70,7 @@ const SignIn = () => {
                 <div className='signin__modal__input-container'>
                     <h4>비밀번호</h4>
                     <input
+                        
                         type='text'
                         placeholder='토큰을 전송할 때 사용할 패스워드를 입력해주세요'
                         

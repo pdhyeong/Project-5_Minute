@@ -19,7 +19,6 @@ let indexRouter = require('./routers/index');
 let userRouter = require('./routers/users');
 let postRouter = require('./routers/post');
 let mypageRouter = require('./routers/mypage');
-let web3Router = require('./routers/web3connect');
 
 const PORT = process.env.PORT || 8081;
 const app = express();
@@ -41,7 +40,6 @@ app.use('/',indexRouter);
 app.use('/users',userRouter);
 app.use('/post', postRouter);
 app.use('/mypage', mypageRouter);
-app.use('/web3',web3Router);
 
 app.listen(PORT, () => {
     console.log("야무지게 돌아가는중");

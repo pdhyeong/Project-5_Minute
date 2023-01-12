@@ -171,9 +171,11 @@ body{
 
     display: flex;
     flex-direction: column;
+    gap: 10px;
     & > h2{
         color: $--main-color;
         font-weight: 400;
+        margin: 20px 0;
     }
     
     &__nft__container{
@@ -182,9 +184,12 @@ body{
         gap: 10px;
     }
     &__nft{
+        &> img{
+            width: 50px;
+            height: 50px;
+        }
         width: 80px;
-        height: 80px;
-        background-color:orange;
+        
     }
 }
 
@@ -234,6 +239,9 @@ body{
     }
 
     &__contents{
+        & > h2{
+            margin-top: 0;
+        }
         &__user{
             display: flex;
             align-items: center;
