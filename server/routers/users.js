@@ -14,7 +14,6 @@ router.get('/',async(req,res,next) => {
             balance = await getBalanceOfERC20(user[0].address);
             await User.updateOne({"address": user[0].address},{ $set : {"token_amount":balance}});
             // await User.updateOne({"address": user[0].address},{ $set : {"profile_image": "https://lh3.googleusercontent.com/a/default-user=s96-c"}});
-        
             user[0].token_amount = balance;
         }
 
