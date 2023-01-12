@@ -24,6 +24,7 @@ router.post('/',async(req,res,next) => {
         content: req.body.content,
         created_at : new Date(),
         address: req.body.address,
+        comments: [],
     });
     res.status(201).json(postcontent);
 
@@ -32,6 +33,48 @@ router.post('/',async(req,res,next) => {
         next(err);
     }
 });
+
+router.post('/comment',async(req,res,next) => {
+    try {
+        console.log(req.body);
+        const postresult = await Post.update(
+            {'content':req.body.post_content},
+            {$push:
+                {'comments': {
+                    user_name: req.body.user_name,
+                    profile_image: req.body.profile_image,
+                    comment_content: req.body.comment_content,
+                    like: 0,
+                }}
+            });
+        const postcontent = await Post.find({});
+            console.log(postcontent);
+    res.status(201).json(postcontent);
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+
+
+router.post('/like',async(req,res,next) => {
+    try {
+        console.log(req.body);
+        const postcontent = await Post.update(
+            {'content':req.body.post_content},
+            {$set:
+                {'like': req.body.like}
+            });
+            console.log(postcontent);
+    res.status(201).json(postcontent);
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;
@@ -45,6 +88,9 @@ router.get('/serach', async (req,res,next) => {
 router.get('/mypost',async (req,res,next) => {
 
 });
+
+
+
 router.post('/bookmark',async (req,res,next) => {
     let user_name = req.body.user_name;
     let postname = req.body.post_name;

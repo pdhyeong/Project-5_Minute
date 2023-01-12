@@ -128,10 +128,10 @@ const Mypage = ({Nft, isFetchingNft, postData}) => {
                     </div>
                     :<div>
                         {
-                            postData.length!==0&&postData.map((e,i)=>{
+                            postData.length!==0&&[...postData].reverse().map((e,i)=>{
                                 if(e.user_name===userInfo.email.split('@')[0])
-                                return <Link to={'../detail/'+i}>
-                                    <Post key={i} postData={e}></Post>
+                                return <Link key={i} to={'../detail/'+i}>
+                                    <Post  postData={e}></Post>
                                 </Link>
                             })
                         }
