@@ -10,7 +10,15 @@ $--main-border-color : rgb(56, 68, 77);
         background-color: rgb(66, 83, 100);
         height: 200px;
         position: relative;
-
+        &>span{
+            position: absolute;
+            bottom: -50px;
+            left: 160px;
+            cursor: pointer;
+            border-radius: 9999px;
+            padding: 10px;
+            box-shadow: 0 0 10px $--main-color;
+        }
         &__profile__img{
             position: absolute;
             bottom: 0;
@@ -66,10 +74,41 @@ $--main-border-color : rgb(56, 68, 77);
         & > span{
             color: $--sub-color;
         }
+
+        &__mynft{
+            display: flex;
+            gap: 4px;
+            &__nft{
+                &>img{
+                    width: 20px;
+                }
+            }
+        }
+
         margin-bottom: 20px;
     }
 
     &__contents{
+        &__container{
+            padding: 0 16px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        &__nftcontainer{
+            display: flex;
+            gap: 30px;
+        }
+        &__mynft{
+            width: 50px;
+            & >img{
+                width: 50px;
+            }
+            & > div{
+                font-size: 10px;
+            }
+        }
 
         &__tap{
             display: flex;
@@ -125,4 +164,32 @@ $--main-border-color : rgb(56, 68, 77);
         content: '';
         height: 2px;
     }
+}
+
+.bg-navy{
+    background-color: $--main-background-color !important;
+    box-sizing: border-box;
+}
+.createpost__profile{
+    & > img{
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+    }
+}
+.replybutton{
+    cursor: pointer;
+    color: $--main-color;
+    background-color: orange;
+    margin-left: 20px;
+    box-shadow: 1px 4px 0 $--main-border-color;
+
+    &:active{
+        box-shadow: 1px 1px 0 $--main-border-color;
+
+    }
+}
+.spacer{
+    height: 40px;
+    width: 100%;
 }

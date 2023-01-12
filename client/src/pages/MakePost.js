@@ -5,6 +5,7 @@ import { render } from "https://cdn.skypack.dev/react-dom@17";
 import confetti from "https://cdn.skypack.dev/canvas-confetti@1";
 import axios from 'axios';
 import { UserContext } from '../context/LoginContext';
+import { useNavigate } from 'react-router-dom';
 
 const MakePost = () => {
     const [descriptions, setDescriptions] = useState({
@@ -12,6 +13,7 @@ const MakePost = () => {
         content: '',
     })
     const {userInfo} = useContext(UserContext);
+    const navigate = useNavigate();
 
     const callback = useCallback(() => {
         confetti({
@@ -24,14 +26,16 @@ const MakePost = () => {
         callback();
         axios.post('http://localhost:8080/post',{
             user_name: userInfo.email.split('@')[0],
+            profile_image: userInfo.profile_image,
             problem_name: 1,
             title: descriptions.title,
             hash_title: [],
             content: descriptions.content,
+            address: userInfo.address,
         })
         .then(res=>{
             console.log('글쓰기 성공');
-            window.location.replace('/');
+            navigate('/');
         })
         .catch(err=>console.log('글쓰기 실패',err));
     }
@@ -65,6 +69,7 @@ const MakePost = () => {
             <div className='makepost__editor-container'>
                 <div className='makepost__editor-container__input-container'>
                     <input 
+                    autoFocus="autofocus"
                     onChange={handleInputChange}
                     placeholder='제목' maxLength='300' type='text'></input>
                     <span>{descriptions.title.length}/300</span>
