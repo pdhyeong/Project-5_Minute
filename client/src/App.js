@@ -15,14 +15,16 @@ function App() {
     token_amount: null,
     address: null,
   })
+  const [curRoute,setCurRoute] = useState('/');
+
 
 
   return (
 
     <div className="App">
       <UserContext.Provider value={{userInfo,setUserInfo,accessToken,setAccessToken}}>
-        <Header ></Header>
-        <Main></Main>
+        <Header curRoute={curRoute} setCurRoute={setCurRoute}></Header>
+        <Main ></Main>
         {
           accessToken===null&&<LogginBanner ></LogginBanner>
         }

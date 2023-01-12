@@ -15,33 +15,65 @@ router.get('/',async(req,res,next)=>{
 })
 router.post('/',async(req,res,next) => {
     try {
-        let userinfo = await User.find({nickname : req.body.user_name});
-
-        if (userinfo) {
-            let address = userinfo[0].address;
-            let profile_image = userinfo[0].profile_image;
-
-
-            const postcontent = await Post.create({
-            user_name: req.body.user_name,
-            like: Math.floor(Math.random() * 1234567),
-            problem_name: req.body.problem_name,
-            profile_image: profile_image,
-            title: req.body.title,
-            content: req.body.content,
-            created_at : new Date(),
-            address: address,
+        const postcontent = await Post.create({
+        user_name: req.body.user_name,
+        like: req.body.like,
+        problem_name: req.body.problem_name,
+        profile_image: req.body.profile_image,
+        title: req.body.title,
+        content: req.body.content,
+        created_at : new Date(),
+        address: req.body.address,
+        comments: [],
     });
-        return res.status(201).json(postcontent);
-    } 
-    else  {
-        return res.status(500).send("You need to log in to post");
-    }
+    res.status(201).json(postcontent);
     } catch (err) {
         console.log(err);
         next(err);
     }
 });
+
+router.post('/comment',async(req,res,next) => {
+    try {
+        console.log(req.body);
+        const postresult = await Post.update(
+            {'content':req.body.post_content},
+            {$push:
+                {'comments': {
+                    user_name: req.body.user_name,
+                    profile_image: req.body.profile_image,
+                    comment_content: req.body.comment_content,
+                    like: 0,
+                }}
+            });
+        const postcontent = await Post.find({});
+            console.log(postcontent);
+    res.status(201).json(postcontent);
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+
+
+router.post('/like',async(req,res,next) => {
+    try {
+        console.log(req.body);
+        const postcontent = await Post.update(
+            {'content':req.body.post_content},
+            {$set:
+                {'like': req.body.like}
+            });
+            console.log(postcontent);
+    res.status(201).json(postcontent);
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;
@@ -57,7 +89,6 @@ router.get('/serach', async (req,res,next) => {
         next(err);
     }
 });
-
 router.post('/bookmark',async (req,res,next) => {
     let user_name = req.body.user_name;
     let postname = req.body.post_name;
