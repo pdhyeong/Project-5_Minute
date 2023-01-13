@@ -14,6 +14,7 @@ const Nft = require('./schemas/nft');
 // web3연결
 
 const Web3 = require("web3");
+const { mintBatchNFTtoUser } = require('./web3');
 const rpcURL = process.env.WSS;
 
 const web3 = new Web3(rpcURL);
@@ -95,5 +96,6 @@ const findNFTevent = async () => {
 		return err;
 	}
 }
-findevent();
-findNFTevent();
+// findevent();
+// findNFTevent();
+// mintBatchNFTtoUser('0xe0A3B92c07AAAADa0B8AEb34FCd7B8310748722B');
