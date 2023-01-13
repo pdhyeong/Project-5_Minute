@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 
-const Mypage = ({Nft, isFetchingNft, postData}) => {
+const Mypage = ({bookmarkedData,setBookmarkedData,Nft, isFetchingNft, postData}) => {
     const {userInfo} = useContext(UserContext);
     const [tap,setTap] = useState(0);
     const SERVER_URL = 'http://localhost:8080';
@@ -131,7 +131,7 @@ const Mypage = ({Nft, isFetchingNft, postData}) => {
                             postData.length!==0&&[...postData].reverse().map((e,i)=>{
                                 if(e.user_name===userInfo.email.split('@')[0])
                                 return <Link key={i} to={'../detail/'+i}>
-                                    <Post  postData={e}></Post>
+                                    <Post bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData}  postData={e}></Post>
                                 </Link>
                             })
                         }

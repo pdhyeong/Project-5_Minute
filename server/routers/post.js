@@ -47,9 +47,10 @@ router.post('/comment',async(req,res,next) => {
                     like: 0,
                 }}
             });
-        const postcontent = await Post.find({});
-            console.log(postcontent);
-    res.status(201).json(postcontent);
+        
+            console.log(postresult);
+            res.status(201).json({postresult});
+        
 
     } catch (err) {
         console.log(err);
@@ -85,48 +86,91 @@ router.get('/serach', async (req,res,next) => {
         next(err);
     }
 });
-router.get('/mypost',async (req,res,next) => {
-
-});
 
 
 
 router.post('/bookmark',async (req,res,next) => {
-    let user_name = req.body.user_name;
-    let postname = req.body.post_name;
-
+    // console.log(req);
+    let email = req.body.email;
+    let post_content = req.body.post_content;
     // 유저를 찾고 그 다음 포스트를 북마크 컬럼에 업데이트
-    if(user_name && postname) {
-        await User.update({"nickname": `${user_name}`},
-        {$push: { bookmark : `${postname}`}}).then(res => {
-            return res.status(200).send("성공");
-        }).catch(err => {
-            console.error(err);
-            next(err);
-            return res.status(500).send("실패영");
-        });
+    if(email && post_content) {
+        const result = await User.update({"email": email}, {$push: { "bookmark" : post_content}});
+        return res.status(200).json(result);
+    
     }
     else {
-        return res.status(500).send("");
+        return res.status(500).send("잘못들옴");
     }
 })
+
+
 router.get('/bookmark',async (req,res,next) => {
-    let user_name = req.query.user_name;
+    let email = req.query.email;
     let result;
-    let bookmarkdata;
-    if(user_name){
-        result = await User.find({"nickname": `${user_name}`});
+    if(email){
+        result = await User.find({"nickname": email});
         // nickname이 사용자와 같은 사람중
         let find = result[0].bookmark;
-        console.log(find);
         // bookmark와 title이 같으면 결과 출력
-        let query = find.map(e=>{return {title:e
-        }});
-        console.log(query);
-        bookmarkdata = await Post.find({$or: query});
+        let query = find.map(e=>e);
+
+        let bookmarkdata = query.filter((e,i)=>query.indexOf(e)===i);
+        // bookmarkdata = await Post.find({$or: query});
+        console.log(bookmarkdata);
         return res.status(200).json(bookmarkdata);
     }
     // 이 유저의 bookmark한 postname을 프론트로 보내줄것은 post의 콘텐츠
     
 });
+
+
+router.post('/insert/bookmark',async (req,res,next)=>{
+    let {email,content} = req.body ;
+    try {
+        console.log(req.body);
+        if(email&&content){
+            const postresult = await User.update(
+                {'email': email},
+                {$push:
+                    {'bookmark': content}
+                });
+        
+            console.log(postresult);
+            res.status(201).json({postresult});
+        }
+        
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+    
+})
+
+router.post('/delete/bookmark',async (req,res,next)=>{
+    let {email,content} = req.body ;
+    try {
+        console.log(req.body);
+        if(email&&content){
+            const postresult = await User.update(
+                {'email': email},
+                {$pull:
+                    {'bookmark': content}
+                });
+        
+            console.log(postresult);
+            res.status(201).json({postresult});
+        }
+        
+
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+    
+})
+
+
+
 module.exports = router;

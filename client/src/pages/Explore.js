@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 import RecommendTag from '../components/RecommendTag';
 
-const Explore = ({setPostData,postData}) => {
+const Explore = ({bookmarkedData,setBookmarkedData,setPostData,postData}) => {
     return (
         <div className='explore'>
             <div className='explore__recommend'>
@@ -16,7 +16,7 @@ const Explore = ({setPostData,postData}) => {
             {
                 postData.length!==0&&[...postData].reverse().map((e,i)=>{
                     return <Link key={i} to={'../detail/'+i}>
-                        <Post setPostData={setPostData}  postData={e}></Post>
+                        <Post bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData} setPostData={setPostData}  postData={e}></Post>
                     </Link>
                 })
             }
