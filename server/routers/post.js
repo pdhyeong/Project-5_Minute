@@ -27,7 +27,6 @@ router.post('/',async(req,res,next) => {
         comments: [],
     });
     res.status(201).json(postcontent);
-
     } catch (err) {
         console.log(err);
         next(err);
@@ -79,8 +78,13 @@ router.post('/like',async(req,res,next) => {
 router.get('/serach', async (req,res,next) => {
     try {
         let problem_title = req.query.problem_title;
-        const showpost = await Post.find({"problem_title": `${problem_title}`});
-        res.json(showpost);
+        if(problem_title){
+            const showpost = await Post.find({"problem_title": `${problem_title}`});
+            return res.json(showpost);
+        }
+        else {
+            return res.status(500).send("Query parameter does not exist");
+        }
     } catch (err) {
         console.error(err);
         next(err);
@@ -120,8 +124,6 @@ router.get('/bookmark',async (req,res,next) => {
         console.log(bookmarkdata);
         return res.status(200).json(bookmarkdata);
     }
-    // 이 유저의 bookmark한 postname을 프론트로 보내줄것은 post의 콘텐츠
-    
 });
 
 

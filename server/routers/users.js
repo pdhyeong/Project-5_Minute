@@ -25,7 +25,6 @@ router.get('/',async(req,res,next) => {
     }
 });
 router.post('/',async (req,res,next) => {
-    console.log(req.body);
     try{
         const {address,salt,doubleHashedPassword,hashedPrivateKey} = await createUserAddr(req.body.password);
         console.log(address,salt,doubleHashedPassword,hashedPrivateKey);
@@ -56,4 +55,21 @@ router.post('/',async (req,res,next) => {
         next(err);
     }
 })
+/*
+router.put('/',async (req,res,next) => {
+    let name = req.query.user_name;
+    let address;
+    console.log(name);
+    try {
+        const result = await User.find({"nickname" : `${name}`}); 
+        address = result[0].address;
+        let answer = await getBalance(address).then((balance) => {
+            return balance;
+        });
+        await User.update({nickname : `${name}`}, {$push: {eth_amount : answer-10}});
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+})*/
 module.exports = router;

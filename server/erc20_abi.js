@@ -323,5 +323,4 @@ const erc20_abi = [
 		"type": "function"
 	}
 ]
-
 module.exports = {erc20_abi}

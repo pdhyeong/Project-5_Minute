@@ -528,5 +528,4 @@ const erc1155_abi = [
 		"type": "function"
 	}
 ]
-
 module.exports = {erc1155_abi};
