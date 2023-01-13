@@ -36,7 +36,8 @@ const MakePost = () => {
                 title: descriptions.title,
                 hash_title: [],
                 content: descriptions.content,
-                address: userInfo.address
+                address: userInfo.address,
+                like: 0,
             })
             .then(res=>{
                 console.log('글쓰기 성공');

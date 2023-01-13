@@ -13,6 +13,8 @@ import axios from 'axios';
 import Redirect from './components/Redirect';
 import SignIn from './components/SignIn';
 import PostView from './components/PostView';
+import ScrollToTop from './components/ScrollToTop';
+import BuyNft from './components/BuyNft';
 
 
 const Main = () => {
@@ -20,7 +22,20 @@ const Main = () => {
     const [Nft,setNft] = useState([]);
     const [postData,setPostData] = useState([]);
     const [isFetchingNft,setIsFetcingNft] = useState(false);
+    const [bookmarkedData,setBookmarkedData] = useState(null);
+
     console.log(Nft);
+
+    const getBookmarkedData = async ()=>{
+        const response = await axios.get(`http://localhost:8080/post/bookmark?email=${userInfo.email.split('@')[0]}`).then(res=>res.data);
+        setBookmarkedData(response);
+    }
+
+    useEffect(()=>{
+        getBookmarkedData();
+        
+    },[userInfo])
+
     
     const getUserNft = async (address) => {
         const response = await axios.get(`http://localhost:8080/nft?address=${address}`);
@@ -110,16 +125,18 @@ const Main = () => {
     return (
         <main className='main'>
             <div className='main-contents-container'>
+                <ScrollToTop></ScrollToTop>
                 <SearchBar></SearchBar>
                 <Routes>
-                    <Route path='/' element={<PostLayout setPostData={setPostData} postData={postData} />}></Route>
-                    <Route path='/mypage' element={accessToken?<Mypage setPostData={setPostData} postData={postData} Nft={Nft} isFetchingNft={isFetchingNft}></Mypage>:<Redirect></Redirect>}></Route>
-                    <Route path='/bookmark' element={accessToken?<Bookmark></Bookmark>:<Redirect></Redirect>}></Route>
-                    <Route path='/explore' element={<Explore setPostData={setPostData} postData={postData}></Explore>}></Route>
+                    <Route path='/' element={<PostLayout bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData} setPostData={setPostData} postData={postData} />}></Route>
+                    <Route path='/mypage' element={accessToken?<Mypage bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData} setPostData={setPostData} postData={postData} Nft={Nft} isFetchingNft={isFetchingNft}></Mypage>:<Redirect></Redirect>}></Route>
+                    <Route path='/bookmark' element={accessToken?<Bookmark setPostData={setPostData} postData={postData} bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData}></Bookmark>:<Redirect></Redirect>}></Route>
+                    <Route path='/explore' element={<Explore bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData} setPostData={setPostData} postData={postData}></Explore>}></Route>
                     <Route path='/post' element={accessToken?<MakePost></MakePost>:<Redirect></Redirect>}></Route>
                     <Route path='/redirect' element={<SocialLogin></SocialLogin>}></Route>
                     <Route path='/signin' element={<SignIn></SignIn>}></Route>
-                    <Route path='/detail/:postid' element={<PostView setPostData={setPostData} postData={postData}></PostView>}></Route>
+                    <Route path='/buynft/:id' element={<BuyNft></BuyNft>}></Route>
+                    <Route path='/detail/:postid' element={<PostView bookmarkedData={bookmarkedData} setBookmarkedData={setBookmarkedData} setPostData={setPostData} postData={postData}></PostView>}></Route>
                 </Routes>
             </div>
             <div className='main-footer-container'>

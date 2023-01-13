@@ -131,6 +131,37 @@ module.exports = {
         }catch(err){
             console.log(err);
         }
+    },
+    mintBatchNFTtoUser: async (address,nft_id)=>{
+        try{
+            console.log('mintBatchStart');
+            const Contract = web3.eth.Contract;
+            const contract = new Contract(erc1155_abi,process.env.ERC1155_CA);
+
+            const account = process.env.SERVER_PUB_KEY;
+            const privateKey = process.env.SERVER_PRIVATE_KEY;
+
+            const transaction = await contract.methods.mintBatch(address,[nft_id],[1],[]);
+            console.log(transaction);
+
+            const options = {
+                to      : transaction._parent._address,
+                data    : transaction.encodeABI(),
+                gas     : await transaction.estimateGas({from: account}),
+                gasPrice: 500000000000,
+            };
+
+            const signed  = await web3.eth.accounts.signTransaction(options, privateKey);
+            console.log(signed);
+
+            const receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
+            console.log(receipt);
+            return receipt;
+
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
 }
