@@ -113,7 +113,7 @@
 
 <br>
 
-![Jan-13-2023 16-51-44.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/befc9f09-f863-41b9-93a1-eafc59d1cece/Jan-13-2023_16-51-44.gif)
+![로그인](https://github.com/pdhyeong/Project-5_Minute/assets/71219602/6f2157df-5492-4ec2-ba03-08a11bc51a7e)
 
 <br>
 
@@ -121,17 +121,16 @@
 
 <br>
 
-![Jan-13-2023 16-51-36.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9b0b5ce8-32b0-4163-a3a8-499c5de55eac/Jan-13-2023_16-51-36.gif)
+![글쓰기](https://github.com/pdhyeong/Project-5_Minute/assets/71219602/3c2d6c82-cfaa-4c47-a4fe-160a8b4966cf)
 
 <br>
 
 ### 다중고유화된 NFT 지급
 
-![Jan-13-2023 16-51-28.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/037d4fcf-0c83-4257-a79b-aff7766e3644/Jan-13-2023_16-51-28.gif)
+![nft](https://github.com/pdhyeong/Project-5_Minute/assets/71219602/546fb08e-2635-44b3-b79f-d6d80f672c79)
 
 <br>
 
 ### 게시물에 댓글 달기
 
-![Jan-13-2023 16-57-12.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4702190c-e060-44e6-bc1b-ef809773ecc7/Jan-13-2023_16-57-12.gif)
-
+![댓글달기](https://github.com/pdhyeong/Project-5_Minute/assets/71219602/e2aa9b96-a278-4c25-958d-9d96ddf45b61)
